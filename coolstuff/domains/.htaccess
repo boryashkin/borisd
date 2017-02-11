@@ -1,0 +1,5 @@
+Options -Indexes
+
+RewriteEngine on
+
+RewriteRule ^index\.php(.*)$ /coolstuff/domains/$1 [L,R=307]
