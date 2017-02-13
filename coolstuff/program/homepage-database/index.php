@@ -52,6 +52,15 @@ $db->close();
         <?php if ($page == 1):?>
             <span class="note-mini">Избранное</span>
             <ul>
+                <li data-tags="architecture">
+                    <a href="http://www.giorgiosironi.com/">Giorgio Sironi</a>
+                </li>
+                <li data-tags="php ddd">
+                    <a href="http://stakeholderwhisperer.com/">Konstantin Kudryashov</a>
+                </li>
+                <li data-tags="php ddd">
+                    <a href="http://verraes.net/">Mathias Verraes</a>
+                </li>
                 <li data-tags="php web">
                     <a href="https://jtreminio.com/">Juan Treminio</a>
                 </li>
