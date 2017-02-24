@@ -124,23 +124,39 @@
 <section id="life-stat">
     <div class="content">
         <h2>Статистика покупок</h2>
-        <div class="note">с 11.12.2016 по <span id="food-score-date-end"></span></div>
+        <div class="note">с 11.12.2016 по <span id="food-score-dateEnd"></span></div>
         <ul>
             <li>
                 <img class="about-food-icon" src="/img/icons/food/colored2/tea.svg" title="Чай"/>
-                <span class="about-food-score" id="food-score-tea"></span>
+                <span class="about-food-score" id="food-score-tea"
+                      data-nominative-name="пакет"
+                      data-genitive-singular-name="пакета"
+                      data-genitive-plural-name="пакетов"
+                ></span>
             </li>
             <li>
                 <img class="about-food-icon" src="/img/icons/food/colored2/ketchup.svg" title="Кетчуп" />
-                <span class="about-food-score" id="food-score-ketchup"></span>
+                <span class="about-food-score" id="food-score-ketchup"
+                      data-nominative-name="бутылка"
+                      data-genitive-singular-name="бутылки"
+                      data-genitive-plural-name="бутылок"
+                ></span>
             </li>
             <li>
                 <img class="about-food-icon" src="/img/icons/food/colored2/bread.svg" title="Хлеб" />
-                <span class="about-food-score" id="food-score-bread"></span>
+                <span class="about-food-score" id="food-score-bread"
+                      data-nominative-name="булка"
+                      data-genitive-singular-name="булки"
+                      data-genitive-plural-name="булок"
+                ></span>
             </li>
             <li>
                 <img class="about-food-icon" src="/img/icons/food/colored2/fried-egg.svg" title="Яйцо" />
-                <span class="about-food-score" id="food-score-egg"></span>
+                <span class="about-food-score" id="food-score-egg"
+                      data-nominative-name="штука"
+                      data-genitive-singular-name="штуки"
+                      data-genitive-plural-name="штук"
+                ></span>
             </li>
         </ul>
     </div>
@@ -183,16 +199,27 @@
     </div>
 </section>
 <div class="header-delimeter"></div>
-<script type="text/javascript" src="/js/functions.js"></script>
+<script type="text/javascript" src="/js/functions.js?2"></script>
 <script>
     readTextFile("/json/food.json", function(text){
         var foodData = JSON.parse(text);
         if (foodData) {
-            document.getElementById('food-score-tea').innerHTML = foodData.tea;
-            document.getElementById('food-score-ketchup').innerHTML = foodData.ketchup;
-            document.getElementById('food-score-bread').innerHTML = foodData.bread;
-            document.getElementById('food-score-egg').innerHTML = foodData.egg;
-            document.getElementById('food-score-date-end').innerHTML = foodData.dateEnd;
+            var entities = ['tea', 'ketchup', 'bread', 'egg', 'dateEnd'];
+            for (var i = 0; i < entities.length; i++) {
+                var key = entities[i],
+                    $el = document.getElementById('food-score-' + key);
+                if ($el.getAttribute('data-nominative-name')) {
+                    $el.innerHTML = foodData[key] + " "
+                        + declensionForNumber(
+                            $el.getAttribute('data-nominative-name'),
+                            $el.getAttribute('data-genitive-singular-name'),
+                            $el.getAttribute('data-genitive-plural-name'),
+                            parseInt(foodData[key])
+                        );
+                } else {
+                    $el.innerHTML = foodData[key];
+                }
+            }
         } else {
             document.getElementById('life-stat').innerHTML = '';
         }
