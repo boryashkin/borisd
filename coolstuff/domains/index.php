@@ -31,16 +31,22 @@
     <div class="content">
         <h1>Ненавижу киберсквоттеров</h1>
         <div>Но собираю интересные домены</div>
-        <?php if (is_string($_GET['domain'])): ?>
-            <h4><?= htmlspecialchars(substr($_GET['domain'], 0, 50)) ?></h4>
+        <?php if (isset($_GET['domain']) && is_string($_GET['domain'])): ?>
+            <h4><?= htmlspecialchars(idn_to_utf8(substr($_GET['domain'], 0, 50))) ?></h4>
         <?php endif; ?>
-        <div class="note-mini">Могу отдать или продать. Выколотые мне совсем не нужны.</div>
+        <div class="note-mini">Могу отдать или продать.</div>
         <ul class="ul-list">
             <li>
-                <a href="http://moneycharge.ru">moneycharge.ru</a>
+                <a href="http://asaprocky.ru">asaprocky.ru</a>
+            </li>
+            <li>
+                <a href="http://jenner.ru">jenner.ru</a>
+            </li>
+            <li>
+                <a href="http://lilwayne.ru">lilwayne.ru</a>
             </li>
         </ul>
-        <div>Почта указана в разделе "Аккаунты"</div>
+        <div>Почта указана в разделе "<a href="/accounts.html">Аккаунты</a>"</div>
     </div>
 </section>
 <div class="header-delimeter"></div>
