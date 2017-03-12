@@ -175,6 +175,10 @@ ul.ul-list {
 }
 
 .color-gray {
+    /* deprecated */
+    color: gray;
+}
+.deprecated {
     color: gray;
 }
 
