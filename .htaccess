@@ -9,5 +9,6 @@ RewriteRule ^(.*)$ http://borisd.ru/coolstuff/domains/?domain=%1 [L]
 RewriteRule ^detect-by-ip/(.*)$ /coolstuff/program/ip/$1
 RewriteRule ^hash/(.*)$ /coolstuff/services/db-password/$1
 RewriteRule ^mymoneyrecords/(.*)$ /coolstuff/services/mymoneyrecords/
+RewriteRule ^hp-db/(.*)$ /coolstuff/program/homepage-database/$1
 RewriteRule ^stuff.html$ /coolstuff/ [R=301,L]
 RewriteRule ^coolstuff/index.php$ /coolstuff/ [R=301,L]
