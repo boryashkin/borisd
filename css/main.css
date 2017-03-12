@@ -242,3 +242,8 @@ ul.ul-list {
     text-decoration: none;
     border-bottom: 1px dashed;
 }
+/* domains */
+.domain-presentation {
+    border: 1px dashed #fd3535;
+    padding: 10px;
+}

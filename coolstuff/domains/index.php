@@ -6,7 +6,7 @@
     <meta name="description" content="Это самые бесполезные люди на Земле" />
     <title>Ненавижу киберсквоттеров!</title>
     <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="/css/main.css?2" />
 </head>
 <body id="space-background">
 <header>
@@ -32,7 +32,13 @@
         <h1>Ненавижу киберсквоттеров</h1>
         <div>Но собираю интересные домены</div>
         <?php if (isset($_GET['domain']) && is_string($_GET['domain'])): ?>
-            <h4><?= htmlspecialchars(idn_to_utf8(substr($_GET['domain'], 0, 50))) ?></h4>
+            <?php $domain = htmlspecialchars(idn_to_utf8(substr($_GET['domain'], 0, 50))) ?>
+            <h4><?= $domain ?></h4>
+            <?php if (in_array($domain, ['обуховская.рф', 'шадринская.рф'])) : ?>
+                <div class="domain-presentation">
+                    <?php include 'presentations/sparking-water.html' ?>
+                </div>
+            <?php endif; ?>
         <?php endif; ?>
         <div class="note-mini">Могу отдать или продать.</div>
         <ul class="ul-list">
