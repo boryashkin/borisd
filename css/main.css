@@ -181,6 +181,9 @@ ul.ul-list {
 .deprecated {
     color: gray;
 }
+.closed {
+    text-decoration: line-through;
+}
 
 .color-green {
     color: green;
