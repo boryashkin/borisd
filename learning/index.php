@@ -18,8 +18,9 @@
                     </a>
                 </li>
                 <li class="nav-menu-item"><a href="/about.html">Обо мне</a></li>
-                <li class="nav-menu-item active"><a href="/coolstuff/">Поделки</a></li>
+                <li class="nav-menu-item"><a href="/coolstuff/">Поделки</a></li>
                 <li class="nav-menu-item"><a href="/accounts.html">Аккаунты</a></li>
+                <li class="nav-menu-item active"><a href="/learning/">Учёба</a></li>
                 <li class="nav-menu-item notactive"><a>Блог</a></li>
             </ul>
         </div>
@@ -31,6 +32,10 @@
         <h1>Алгоритмы и структуры данных</h1>
         <ul class="ul-list">
             <li><a href="/learning/algoritms/">Писанина</a></li>
+        </ul>
+        <h1>Бумажки на стену</h1>
+        <ul class="ul-list">
+            <li><a href="/learning/zce/">Подготовка к ZCE</a></li>
         </ul>
     </div>
 </section>
