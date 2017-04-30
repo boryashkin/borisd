@@ -52,6 +52,9 @@ $db->close();
         <?php if ($page == 1):?>
             <span class="note-mini">Избранное</span>
             <ul>
+                <li data-tags="home-page web architecture">
+                    <a href="http://bolknote.ru/">Евгений Степанищев</a>
+                </li>
                 <li data-tags="home-page patterns architecture">
                     <a href="https://martinfowler.com/">Martin Fowler</a>
                 </li>
