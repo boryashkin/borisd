@@ -2,9 +2,8 @@ Options -Indexes
 
 RewriteEngine on
 
-RewriteCond %{HTTP_HOST} ^([^borisd\.ru.*].*)$ [NC]
-RewriteCond %{HTTP_HOST} ^([^borisd\.wf.*].*)$ [NC]
-RewriteRule ^(.*)$ http://borisd.ru/coolstuff/domains/?domain=%1 [L]
+RewriteCond %{HTTP_HOST} ^(?!borisd\.(ru|wf)).*$ [NC]
+RewriteRule ^(.*)$ http://borisd.ru/coolstuff/domains/?domain=%0 [L]
 
 RewriteRule ^detect-by-ip/(.*)$ /coolstuff/program/ip/$1
 RewriteRule ^hash/(.*)$ /coolstuff/services/db-password/$1
