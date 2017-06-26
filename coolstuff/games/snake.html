@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head lang="ru">
+    <meta charset="UTF-8">
+    <title>Snake</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+    <style>
+        #gc, #log {
+            display: inline-block;
+        }
+        #log {
+            height: 400px;
+            width: 320px;
+            overflow-y: scroll;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            canv = document.getElementById("gc");
+            ctx = canv.getContext("2d");
+            document.addEventListener("keydown", keyPush);
+            logBlock = document.getElementById("log");
+            setInterval(game, 1000/15);
+        };
+        px = py = 10;
+        gs = tc = 20;
+        ax = ay = 15;
+        xv = yv = 0;
+        trail = [];
+        tail = 5;
+        pause = false;
+
+        function game() {
+            if (pause) {
+                return;
+            }
+            px += xv;
+            py += yv;
+            if (px < 0) {
+                px = tc - 1;
+            }
+            if (px > tc - 1) {
+                px = 0;
+            }
+            if (py < 0) {
+                py = tc - 1;
+            }
+            if (py > tc - 1) {
+                py = 0;
+            }
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canv.width, canv.height);
+
+            ctx.fillStyle = "lime";
+            for (var i = 0; i < trail.length; i++) {
+                ctx.fillRect(trail[i].x * gs, trail[i].y * gs, gs - 2, gs - 2);
+                if (trail[i].x == px && trail[i].y == py) {
+                    saveScore(tail);
+                    tail = 5;
+                }
+            }
+
+            trail.push({x: px, y: py});
+            while (trail.length > tail) {
+                trail.shift();
+            }
+
+            if (ax == px && ay == py) {
+                tail++;
+                ax = Math.floor(Math.random() * tc);
+                ay = Math.floor(Math.random() * tc);
+            }
+
+            ctx.fillStyle = "red";
+            ctx.fillRect(ax * gs, ay * gs, gs -2, gs - 2);
+            logTheMoment();
+        }
+        function saveScore(score) {
+            var board = document.getElementById("score");
+            if (parseInt(board.innerText) < score) {
+                board.innerText = score;
+            }
+        }
+        function logTheMoment() {
+            while (logBlock.firstChild) {
+                logBlock.removeChild(logBlock.firstChild);
+            }
+            var list = document.createElement("ul");
+            var names = ['px', 'py', 'gs', 'tc', 'ax', 'ay', 'xv', 'yv', 'tail'];
+            var el = document.createElement("li");
+            el.innerText = "--log of variables vaues--";
+            list.appendChild(el);
+            names.forEach(function (value) {
+                var el = document.createElement("li");
+                el.innerText = value + " " + window[value];
+                list.appendChild(el);
+            });
+            var el = document.createElement("li");
+            el.innerText = "--trail (" + trail.length + "):--";
+            list.appendChild(el);
+            trail.forEach(function (value) {
+                var el = document.createElement("li");
+                el.innerText = "x: " + value.x;
+                list.appendChild(el);
+                el = document.createElement("li");
+                el.innerText = "y: " + value.y;
+                list.appendChild(el);
+            });
+            logBlock.appendChild(list);
+        }
+        prevButton = 0;
+        function keyPush(evt) {
+            if (evt.keyCode == 40 || evt.keyCode == 38 || evt.keyCode == 32) {
+                evt.stopPropagation();
+                evt.returnValue = false;
+            }
+            if (evt.keyCode == 32 || evt.keyCode == 19) {
+                pause = !pause;
+                return false;
+            }
+            switch (prevButton) {
+                //left
+                case 37:
+                    if (evt.keyCode == 39) {
+                        return false;
+                    }
+                    break;
+                //down
+                case 38:
+                    if (evt.keyCode == 40) {
+                        return false;
+                    }
+                    break;
+                //right
+                case 39:
+                    if (evt.keyCode == 37) {
+                        return false;
+                    }
+                    break;
+                //up
+                case 40:
+                    if (evt.keyCode == 38) {
+                        return false;
+                    }
+                    break;
+            }
+            switch (evt.keyCode) {
+                //left
+                case 37:
+                    xv = -1;
+                    yv = 0;
+                    break;
+                //down
+                case 38:
+                    xv = 0;
+                    yv = -1;
+                    break;
+                //right
+                case 39:
+                    xv = 1;
+                    yv = 0;
+                    break;
+                //up
+                case 40:
+                    xv = 0;
+                    yv = 1;
+                    break;
+            }
+            prevButton = evt.keyCode;
+            return false;
+        }
+    </script>
+</head>
+<body id="space-background">
+<header>
+    <nav id="header-nav">
+        <div id="nav-menu">
+            <ul id="nav-menu-list">
+                <li class="nav-menu-item logo">
+                    <a href="/">
+                        <img src="/img/theme/ySzBWqrmyuA.jpg" />
+                    </a>
+                </li>
+                <li class="nav-menu-item"><a href="/about.html">Обо мне</a></li>
+                <li class="nav-menu-item active"><a href="/stuff.html">Поделки</a></li>
+                <li class="nav-menu-item"><a href="/accounts.html">Аккаунты</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<div class="header-delimeter"></div>
+<section id="game">
+    <div class="content">
+        <h1>Snake game</h1>
+        <b>Press space bar to pause the game</b>
+        <div class="note">Gamkedo tutorial <a href="https://www.youtube.com/watch?v=xGmXxpIj6vs">on youtube</a> </div>
+        <div>Your record: <b id="score">0</b></div>
+        <div class="code">
+            <canvas id="gc" width="400" height="400"></canvas>
+            <div id="log"></div>
+        </div>
+    </div>
+</section>
+<div class="header-delimeter"></div>
+<!-- Yandex.Metrika counter --><script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter33791179 = new Ya.Metrika({ id:33791179, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, trackHash:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="https://mc.yandex.ru/watch/33791179" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+</body>
+</html>
