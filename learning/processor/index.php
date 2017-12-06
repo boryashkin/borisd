@@ -2,10 +2,25 @@
 /**
  * @ http://educomp.runnet.ru/kroha/depak_art.html
  */
-$rank = 12;
-$cell = 8;
-?>
+$rank = 15;
+$cell = 16;
 
+$cellNames = [];
+for ($i = 0; $i < $cell; $i++) {
+    $cellNames[$i] = sprintf("%04d", decbin($i));
+}
+?>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ЭВМ Кроха-М</title>
+    <style>
+        td:nth-child(1), td:nth-child(4n-12) {
+            padding-right: 10px;
+        }
+    </style>
+</head>
+<body>
 <form method="get">
     <table>
         <caption>Задание команды</caption>
@@ -21,8 +36,8 @@ $cell = 8;
             <td>
                 <select name="N">
                     <?php
-                    for ($i = 1; $i <= $cell; $i++) { ?>
-                        <option><?= $i ?></option>
+                    foreach ($cellNames as $num => $name) { ?>
+                        <option><?= $name ?></option>
                         <?php
                     } ?>
                 </select>
@@ -42,17 +57,17 @@ $cell = 8;
             <td>
                 <select name="A1">
                     <?php
-                    for ($i = 1; $i <= $cell; $i++) { ?>
-                        <option><?= $i ?></option>
-                    <?php
+                    foreach ($cellNames as $num => $name) { ?>
+                        <option><?= $name ?></option>
+                        <?php
                     } ?>
                 </select>
             </td>
             <td>
                 <select name="A2">
                     <?php
-                    for ($i = 1; $i <= $cell; $i++) { ?>
-                        <option><?= $i ?></option>
+                    foreach ($cellNames as $num => $name) { ?>
+                        <option><?= $name ?></option>
                         <?php
                     } ?>
                 </select>
@@ -60,8 +75,8 @@ $cell = 8;
             <td>
                 <select name="A3">
                     <?php
-                    for ($i = 1; $i <= $cell; $i++) { ?>
-                        <option><?= $i ?></option>
+                    foreach ($cellNames as $num => $name) { ?>
+                        <option><?= $name ?></option>
                         <?php
                     } ?>
                 </select>
@@ -73,23 +88,25 @@ $cell = 8;
 
 <table>
     <?php
-    for ($i = 1; $i <= $cell; $i++) { ?>
-    <tr>
-        <td>
-            <?= '|'. $i .'|' ?>
-        </td>
+    for ($i = 0; $i < $cell; $i++) { ?>
+        <tr>
+            <td>
+                | <?= $cellNames[$i] ?> |
+            </td>
+            <?php
+            for ($k = 1; $k <= $rank; $k++) { ?>
+                <td>
+                    <?= rand (0, 1); ?>
+                </td>
+                <?php
+            } ?>
+        </tr>
         <?php
-        for ($k = 1; $k <= $rank; $k++) { ?>
-        <td>
-            <?= rand (0, 1); ?>
-        </td>
-        <?php
-        } ?>
-    </tr>
-    <?php
     } ?>
 </table>
 <br>
 <br>
 <br>
 <button>Запустить программу</button>
+</body>
+</html>
