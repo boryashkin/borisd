@@ -1,5 +1,0 @@
-.idea
-json/*
-!json/.gitignore
-secret-folder/*
-!secret-folder/.gitignore

@@ -1,8 +1,0 @@
-<Files "cidr_optim.txt">
-Order Allow,Deny
-Deny from all
-</Files>
-<Files "cities.txt">
-Order Allow,Deny
-Deny from all
-</Files>
