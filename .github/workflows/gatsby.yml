@@ -27,6 +27,7 @@ concurrency:
 # Default to bash
 defaults:
   run:
+    working-directory: ./app
     shell: bash
 
 jobs:
