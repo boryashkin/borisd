@@ -148,15 +148,16 @@ const Hamming1511 = (props: {value: string}) => {
     return (
         <>
             <div>
-            <i>try to corrupt the data:</i>
+                {createCellObjects(cells)}
+                <div><i>⬆️ change bits to affect decoding</i></div>
             </div>
-            {createCellObjects(cells)}
+            <div className="mt-3">
+                Decoded data: <b>{arrayToSymbol(decodeHamming1511(cells))}</b>
+            </div>
             <div>
-                Decoded data: {arrayToSymbol(decodeHamming1511(cells))}
+                Checks: Error position: <b><i>{errPos.singleErrorPosition}</i></b>; More than one error: <b><i>{errPos.overallParityValid ? "true" : "false"}</i></b>.
             </div>
-            <div>
-                Error position: {errPos.singleErrorPosition}; More than one error: {errPos.overallParityValid ? "true" : "false"}
-            </div>
+            <div className="text text-sm"><i>decoded data based only on your bits</i></div>
         </>
     )
 }
@@ -164,12 +165,12 @@ const Hamming1511 = (props: {value: string}) => {
 const parityCheckPlaces1511 = [1, 2, 4, 8, 16, 32, 64, 128];
 
 const Cell = (props: { idx: number, number: number, onChange: (event: React.ChangeEvent<HTMLInputElement>) => void }) => {
-    const bgColor = parityCheckPlaces1511.includes(props.idx) ? "bg-emerald-200" : ""
+    const bgColor = parityCheckPlaces1511.includes(props.idx) ? "bg-emerald-200" : (props.idx == 0 ? "bg-gray-200" : "")
 
 
     return (<>
     {props.idx % 4 == 0 && <br/>}
-    <input className={bgColor + " border border-emerald-500"} type="number" min="0" max="1" value={props.number} onChange={props.onChange} />
+    <input className={bgColor + " border border-emerald-500 bg-"} type="number" min="0" max="1" value={props.number} onChange={props.onChange} />
     </>
     
     )
@@ -202,7 +203,7 @@ const ParityCalculator = () => {
 
     return (
         <>
-            <b>m = </b><input className="border border-neutral-200" name="m" placeholder="m" type="number" min={1} max={256} onChange={(e) => { calcP(parseInt(e.target.value)) }}></input> <i>{"<-"} enter "m"</i>
+            <b>m = </b><input className="border border-neutral-200" name="m" placeholder="m" type="number" min={1} max={256} onChange={(e) => { calcP(parseInt(e.target.value)) }}></input> <i>⬅️ enter "m"</i>
             <div>
                 <b>p = </b> {p}
             </div>
@@ -235,8 +236,9 @@ export default function Page() {
                     Position of parity bits = 2^n (or 1, 2, 4, 8, 16, 32, 64, 128...).
                 </p>
                 <b>Example</b>
-                <h4>Data: "<input className="w-5 border border-neutral-200" value={currentData} type="text" minLength={1} maxLength={1} onChange={(e) => { setCurrentData(e.target.value) }} />" 
-                or "{currentDataBin}", data bits: {numberOfDataBits}, <span className="text-emerald-500">parity bits</span>: {numberOfParityBits}</h4>
+                <div>Input Data: "<input className="w-5 border border-neutral-200" value={currentData} type="text" minLength={1} maxLength={1} onChange={(e) => { setCurrentData(e.target.value) }} />" <i>⬅️ enter "data"</i></div>
+                <div className="text text-sm">About the data: <i>"{currentDataBin}", data bits: {numberOfDataBits}, <span className="text-emerald-500">parity bits</span>: {numberOfParityBits}</i>, <span className="text-gray-500">overall parity bits</span>: 1</div>
+                <div className="mb-3"></div>
                 <Hamming1511 value={currentData}/>
             </div>
         </Layout>
