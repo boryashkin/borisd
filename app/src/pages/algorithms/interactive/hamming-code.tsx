@@ -157,7 +157,7 @@ const Hamming1511 = (props: {value: string}) => {
             <div>
                 Checks: Error position: <b><i>{errPos.singleErrorPosition}</i></b>; More than one error: <b><i>{errPos.overallParityValid ? "true" : "false"}</i></b>.
             </div>
-            <div className="text text-sm"><i>decoded data based only on your bits</i></div>
+            <div className="text-sm"><i>decoded data based only on your bits</i></div>
         </>
     )
 }
@@ -237,9 +237,12 @@ export default function Page() {
                 </p>
                 <b>Example</b>
                 <div>Input Data: "<input className="w-5 border border-neutral-200" value={currentData} type="text" minLength={1} maxLength={1} onChange={(e) => { setCurrentData(e.target.value) }} />" <i>⬅️ enter "data"</i></div>
-                <div className="text text-sm">About the data: <i>"{currentDataBin}", data bits: {numberOfDataBits}, <span className="text-emerald-500">parity bits</span>: {numberOfParityBits}</i>, <span className="text-gray-500">overall parity bits</span>: 1</div>
+                <div className="text-sm">About the data: <i>"{currentDataBin}", data bits: {numberOfDataBits}, <span className="text-emerald-500">parity bits</span>: {numberOfParityBits}</i>, <span className="text-gray-500">overall parity bits</span>: 1</div>
                 <div className="mb-3"></div>
                 <Hamming1511 value={currentData}/>
+            </div>
+            <div className="mt-10 text-sm">
+            Learn more on YouTube <a href="https://www.youtube.com/watch?v=X8jsijhllIA">"But what are Hamming codes? The origin of error correction" by 3Blue1Brown</a>
             </div>
         </Layout>
     )
