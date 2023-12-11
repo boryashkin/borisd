@@ -17,7 +17,7 @@ const IndexPage: React.FC<PageProps> = () => {
   return (
     <Layout>
       <p style={paragraphStyles}>
-        Hi! You can read my blogs at linkedin and telegram, and see my project on <a href="https://github.com/boryashkin">github</a>.
+        Hi! You can read my blogs at linkedin and <a href="https://t.me/borischan">telegram</a>, and see my project on <a href="https://github.com/boryashkin">github</a>.
       </p>
     </Layout>
   )
