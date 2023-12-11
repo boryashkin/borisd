@@ -27,7 +27,6 @@ concurrency:
 # Default to bash
 defaults:
   run:
-    working-directory: ./app
     shell: bash
 
 jobs:
@@ -37,6 +36,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            .github
+            app
+      - name: Move app to working dir
+        id: move-app-to-work-dir
+        run: |
+          mv app/* .
       - name: Detect package manager
         id: detect-package-manager
         run: |
@@ -83,7 +90,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: ${{ github.workspace }}/public
+          path: ./public
 
   # Deployment job
   deploy:
