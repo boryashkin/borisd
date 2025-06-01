@@ -1,5 +1,32 @@
 import React from "react"
 
+interface SEOProps {
+  title: string;
+  description?: string;
+  image?: string;
+  lang?: string;
+  meta?: Array<{ name: string; content: string }>;
+}
+
+export const SEO = ({ 
+  title,
+  description = "borisd cool website", // Fallback if undefined
+  image, 
+  lang = "en", 
+  meta = [] 
+}: SEOProps) => {
+  return (
+    <>
+    <title>{title}</title>
+    <meta name="description" content={description} />\
+    {image && <meta property="og:image" content={image} />}
+    {meta.map((tag, i) => (
+      <meta key={i} name={tag.name} content={tag.content} />
+    ))}
+  </>
+  );
+};
+
 const docLinks = [
     {
         text: "About me",
@@ -9,10 +36,15 @@ const docLinks = [
         text: "Algorithms",
         url: "/algorithms/",
     },
+    {
+        text: "Blog",
+        url: "/blog/",
+    },
 ]
 
-export default function Layout({ children }: any) {
+export default function Layout({ children }: {children: any}) {
     return (
+      <>
         <main className="p-10">
             <h1 className="">
                 <a href="/">borisd</a>
@@ -35,5 +67,6 @@ export default function Layout({ children }: any) {
                 ))}
             </ul>
         </main>
+      </>
     )
 }

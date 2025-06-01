@@ -1,6 +1,6 @@
 import * as React from "react"
 import type { HeadFC, PageProps } from "gatsby"
-import Layout from "../components/layout"
+import Layout, { SEO } from "../templates/layout"
 
 const paragraphStyles = {
   marginBottom: 48,
@@ -25,4 +25,6 @@ const IndexPage: React.FC<PageProps> = () => {
 
 export default IndexPage
 
-export const Head: HeadFC = () => <title>Home Page</title>
+export const Head = () => (
+  <SEO title="Cool SWE website"/>
+)

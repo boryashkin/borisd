@@ -9,3 +9,5 @@ docker run --name gatsby-env -v "$PWD":/usr/src/app -w /usr/src/app -it gatsby-e
 # Development 
 
 docker run --name gatsby-env -p 8000:8000 -v "$PWD/app":/usr/src/app -w /usr/src/app -it gatsby-env sh
+
+// for a clean container: apk add --update python3 g++

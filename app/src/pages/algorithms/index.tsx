@@ -1,5 +1,5 @@
 import * as React from "react"
-import Layout from "../../components/layout"
+import Layout, { SEO } from "../../templates/layout"
 
 export default function Page() {
   return (
@@ -13,3 +13,7 @@ export default function Page() {
     </Layout>
   )
 }
+
+export const Head = () => (
+  <SEO title="Algorithms"/>
+)

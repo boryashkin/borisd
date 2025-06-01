@@ -1,5 +1,5 @@
 import * as React from "react"
-import Layout from "../../../components/layout"
+import Layout, { SEO } from "../../../templates/layout"
 
 const parityBitPositions = (n: number): number[] => {
     let multipliers: number[] = []
@@ -247,3 +247,7 @@ export default function Page() {
         </Layout>
     )
 }
+
+export const Head = () => (
+    <SEO title="Algorithms / Hamming code visualisation"/>
+)

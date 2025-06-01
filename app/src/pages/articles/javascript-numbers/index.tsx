@@ -1,5 +1,5 @@
 import * as React from "react"
-import Layout from "../../../components/layout"
+import Layout, { SEO } from "../../../templates/layout"
 import { NumberTo32Array } from "../../../components/binary"
 
 
@@ -66,6 +66,10 @@ export default function Page() {
     </Layout>
   )
 }
+
+export const Head = () => (
+    <SEO title="Articles / Javascript numbers bits"/>
+)
 
 const BitwiseOperationsSection = () => {
     const [register, setRegister] = React.useState((new Array(32)).fill(0))

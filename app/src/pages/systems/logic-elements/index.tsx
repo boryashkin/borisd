@@ -1,5 +1,5 @@
 import * as React from "react"
-import Layout from "../../../components/layout";
+import Layout, { SEO } from "../../../templates/layout";
 import { And32 } from "../../../components/logic";
 
 
@@ -13,3 +13,7 @@ export default function Page() {
         </Layout>
     )
 }
+
+export const Head = () => (
+    <SEO title="Systems / ???"/>
+)
