@@ -132,6 +132,8 @@ export const createPages: GatsbyNode['createPages'] = async ({ graphql, actions 
       throw result.errors;
     }
 
+    if (!result.data) throw new Error("Empty GraphQL result")
+
     const posts = result.data.allIndexMetadata.nodes;
     const postsPerPage = 30;
     const numPages = Math.ceil(posts.length / postsPerPage);
@@ -155,6 +157,8 @@ export const createPages: GatsbyNode['createPages'] = async ({ graphql, actions 
         component: path.resolve(`src/templates/index/index.tsx`),
         context: ctx
       });
+
+      console.debug('created a page', item.section)
     });
   }
 };
