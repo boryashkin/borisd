@@ -5,9 +5,8 @@ import path from 'path';
 import { readFileSync } from 'fs';
 import { parse } from '@babel/parser';
 import traverse from '@babel/traverse';
-import { BlogMetadata, metadataFieldsToNodeValues } from './src/models/blog';
-import { IndexMetadataDeclaration, IndexMetadataNodeValue } from './src/models/index';
-import { list } from 'postcss';
+import { PageMetadata, metadataFieldsToNodeValues } from './src/models/index';
+import { IndexMetadataDeclaration, IndexMetadataNodeValue, PageContext } from './src/models/index';
 
 interface QueryResult {
   allIndexMetadata: {
@@ -18,7 +17,7 @@ interface QueryResult {
 export const onCreateNode: GatsbyNode['onCreateNode'] = async ({ node, actions, createNodeId }) => {
   const { createNodeField, createNode } = actions;
 
-  if (node.internal.type === 'File' && node.sourceInstanceName == 'blog' && node.extension == 'tsx') {
+  if (node.internal.type === 'File' && node.extension == 'tsx') {
     if (!node.hasOwnProperty('relativePath') || !node.hasOwnProperty('absolutePath')) {
       console.error(`Node ${node.id} does not have a relativePath or absolutePath property.`);
       return;
@@ -35,7 +34,7 @@ export const onCreateNode: GatsbyNode['onCreateNode'] = async ({ node, actions, 
       });
 
 
-      let metadataPreFilled: BlogMetadata | null = null;
+      let metadataPreFilled: PageMetadata | null = null;
       traverse(ast, {
         ExportNamedDeclaration(path) {
           if (path.node.declaration?.type === 'VariableDeclaration') {
@@ -53,20 +52,20 @@ export const onCreateNode: GatsbyNode['onCreateNode'] = async ({ node, actions, 
                 }
                 return acc;
               }, {} as Record<string, string>);
-              metadataPreFilled = properties as BlogMetadata;
+              metadataPreFilled = properties as PageMetadata;
             }
           }
         },
       });
 
       if (metadataPreFilled) {
-        metadataPreFilled = metadataPreFilled as BlogMetadata;
+        metadataPreFilled = metadataPreFilled as PageMetadata;
         if (!metadataPreFilled.title || !metadataPreFilled.date) {
           return;
         }
 
         
-        const itemPath = '/' + node.sourceInstanceName + '/' + node.relativePath.replace(/\.tsx?$/, '');
+        const itemPath = '/' + node.sourceInstanceName + '/' + node.relativePath.replace(/index\.tsx?$/, '').replace(/\.tsx?$/, '');
         const id = createNodeId(`IndexMetadata-${itemPath}`);
         let metadata: IndexMetadataNodeValue = metadataFieldsToNodeValues(id, itemPath, metadataPreFilled);
 
@@ -95,50 +94,67 @@ exports.createSchemaCustomization = ({ actions }) => {
   createTypes(IndexMetadataDeclaration)
 }
 
+interface IndexToTitle {
+  section: string
+  title: string
+}
+
 export const createPages: GatsbyNode['createPages'] = async ({ graphql, actions }) => {
   const { createPage } = actions;
 
-  const result = await graphql<QueryResult>(`
-    query {
+  const sections : IndexToTitle[] = [
+    {section: 'blog', title: 'Blog posts'},
+    {section: 'articles', title: 'Articles'},
+    {section: 'algorithms', title: 'Algorithms'},
+  ]
+
+  // index pages are created here
+  for (const item of sections) {
+    const result = await graphql<QueryResult>(`
+    query ($section: String!) {
       allIndexMetadata(
-        filter:{pathPrefix:{eq:"blog"}}, 
+        filter:{pathPrefix:{eq:$section}}, 
         sort: {date:DESC}
       ){
         nodes{
           path
           pathPrefix
           title
+          lang
           description
           date
         }
       }
     }
-  `);
+  `, {"section": item.section});
 
-  if (result.errors || !result.data) {
-    throw result.errors;
-  }
+    if (result.errors || !result.data) {
+      throw result.errors;
+    }
 
-  const posts = result.data.allIndexMetadata.nodes;
-  const postsPerPage = 30;
-  const numPages = Math.ceil(posts.length / postsPerPage);
+    const posts = result.data.allIndexMetadata.nodes;
+    const postsPerPage = 30;
+    const numPages = Math.ceil(posts.length / postsPerPage);
 
-  Array.from({ length: numPages }).forEach((_, i) => {
-    const currentPage = i + 1;
-    const skip = i * postsPerPage;
-    const limit = postsPerPage;
-
-    createPage({
-      path: i === 0 ? '/blog' : `/blog/page/${currentPage}`,
-      component: path.resolve(`src/templates/index/index.tsx`),
-      context: {
+    Array.from({ length: numPages }).forEach((_, i) => {
+      const currentPage = i + 1;
+      const skip = i * postsPerPage;
+      const limit = postsPerPage;
+      const ctx: PageContext = {
         limit,
         skip,
         numPages,
         currentPage,
-        pathPrefix: '/blog',
-        listName: 'Blog posts',
+        pathPrefixRoot: `/${item.section}`,
+        section: item.section,
+        listName: item.title,
       }
+
+      createPage({
+        path: i === 0 ? `/${item.section}` : `/${item.section}/page/${currentPage}`,
+        component: path.resolve(`src/templates/index/index.tsx`),
+        context: ctx
+      });
     });
-  });
+  }
 };

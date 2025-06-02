@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { PageProps, graphql, Link } from 'gatsby';
 import Layout from '../layout';
-import { IndexMetadataNodeValue } from '../../models/index';
+import { IndexMetadataNodeValue, PageContext } from '../../models/index';
 
 /*
   * It's still hardcoded as a blog index. 
@@ -9,9 +9,9 @@ import { IndexMetadataNodeValue } from '../../models/index';
   */
 
 export const query = graphql`
-query ($limit: Int!, $skip: Int!) {
+query ($limit: Int!, $skip: Int!, $section: String!) {
   allIndexMetadata(
-    filter:{pathPrefix:{eq:"blog"}}, 
+    filter:{pathPrefix:{eq:$section}}, 
     sort: {date:DESC} 
     limit: $limit
     skip: $skip
@@ -21,6 +21,7 @@ query ($limit: Int!, $skip: Int!) {
       path
       pathPrefix
       title
+      lang
       description
       date
     }
@@ -33,7 +34,7 @@ query ($limit: Int!, $skip: Int!) {
 }
 `;
 
-interface BlogIndexData {
+interface IndexData {
   allIndexMetadata: {
         nodes: IndexMetadataNodeValue[];
     }
@@ -44,16 +45,7 @@ interface BlogIndexData {
     };
 }
 
-interface PageContext {
-  limit: number;
-  skip: number;
-  numPages: number;
-  currentPage: number;
-  pathPrefix: string;
-  listName: string;
-}
-
-const BlogIndex: React.FC<PageProps<BlogIndexData, PageContext>> = ({ data, pageContext }) => {
+const BlogIndex: React.FC<PageProps<IndexData, PageContext>> = ({ data, pageContext }) => {
   const { nodes } = data.allIndexMetadata;
   const { siteUrl } = data.site.siteMetadata;
   const { currentPage, numPages } = pageContext;
@@ -118,7 +110,7 @@ const BlogIndex: React.FC<PageProps<BlogIndexData, PageContext>> = ({ data, page
 
 export default BlogIndex;
 
-export const Head = ({ data, pageContext }: PageProps<BlogIndexData, PageContext>) => {
+export const Head = ({ data, pageContext }: PageProps<IndexData, PageContext>) => {
   const { currentPage } = pageContext;
   const currentPageUrl = getCurrentPageUrl(pageContext);
   const { siteUrl } = data.site.siteMetadata;
@@ -135,18 +127,18 @@ export const Head = ({ data, pageContext }: PageProps<BlogIndexData, PageContext
 };
 
 const getCurrentPageUrl = (pageContext: PageContext): string => {
-  return pageContext.currentPage === 1 ? pageContext.pathPrefix : `${pageContext.pathPrefix}/page/${pageContext.currentPage}`
+  return pageContext.currentPage === 1 ? pageContext.pathPrefixRoot : `${pageContext.pathPrefixRoot}/page/${pageContext.currentPage}`
 }
 
 const getPrevPageUrl = (pageContext: PageContext): string => {
-  return pageContext.currentPage - 1 === 1 ? pageContext.pathPrefix : `${pageContext.pathPrefix}/page/${pageContext.currentPage - 1}`;
+  return pageContext.currentPage - 1 === 1 ? pageContext.pathPrefixRoot : `${pageContext.pathPrefixRoot}/page/${pageContext.currentPage - 1}`;
   
 }
 
 const getNextPageUrl = (pageContext: PageContext): string => {
-  return `${pageContext.pathPrefix}/page/${pageContext.currentPage + 1}`;
+  return `${pageContext.pathPrefixRoot}/page/${pageContext.currentPage + 1}`;
 }
 
 const getPageUrlI = (pageContext: PageContext, i: number): string => {
-  return i < 2 ? pageContext.pathPrefix : `${pageContext.pathPrefix}/page/${i}`;
+  return i < 2 ? pageContext.pathPrefixRoot : `${pageContext.pathPrefixRoot}/page/${i}`;
 }

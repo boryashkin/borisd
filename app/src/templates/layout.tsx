@@ -37,6 +37,10 @@ const docLinks = [
         url: "/algorithms/",
     },
     {
+        text: "Articles",
+        url: "/articles/",
+    },
+    {
         text: "Blog",
         url: "/blog/",
     },

@@ -1,5 +1,13 @@
 import * as React from "react"
 import Layout, { SEO } from "../../../templates/layout"
+import { PageMetadata } from "../../../models/index";
+
+export const metadata: PageMetadata = {
+    title: 'Hamming code visualisation',
+    lang: "en",
+    description: "In order to understand how Hamming code works, i created this interactive visualisation. You can change bits and see how it affects decoding.",
+    date: "2023-12-12",
+  };
 
 const parityBitPositions = (n: number): number[] => {
     let multipliers: number[] = []
@@ -249,5 +257,5 @@ export default function Page() {
 }
 
 export const Head = () => (
-    <SEO title="Algorithms / Hamming code visualisation"/>
+    <SEO title={metadata.title} description={metadata.description} lang={metadata.lang}/>
 )

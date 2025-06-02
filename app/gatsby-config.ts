@@ -19,6 +19,22 @@ const config: GatsbyConfig = {
         ignore: [`**/*.js`],
       },
     },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `articles`,
+        path: `${__dirname}/src/pages/articles`,
+        ignore: [`**/*.js`],
+      },
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `algorithms`,
+        path: `${__dirname}/src/pages/algorithms`,
+        ignore: [`**/*.js`],
+      },
+    },
   ]
 };
 

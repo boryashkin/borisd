@@ -1,7 +1,14 @@
 import * as React from "react"
 import Layout, { SEO } from "../../../templates/layout"
 import { NumberTo32Array } from "../../../components/binary"
+import { PageMetadata } from "../../../models/index";
 
+export const metadata: PageMetadata = {
+    title: 'Inside JavaScript Numbers',
+    lang: "en",
+    description: "Trying to learn and showcase how Javascript numbers work internally, how to use bitwise operations, and how to represent binary numbers in JS.",
+    date: "2024-01-05",
+  };
 
 const ArrayTableView = (props: {values: Array<string|number>, withIndexHeader: boolean}) => {
     const [flashColor, setFlashColor] = React.useState("")
@@ -41,7 +48,7 @@ const ArrayTableView = (props: {values: Array<string|number>, withIndexHeader: b
 export default function Page() {
   return (
     <Layout>
-        <h1 className="text-2xl mb-5">JS number's internal representation <i>(draft)</i></h1>
+        <h1 className="text-2xl mb-5">Inside JavaScript Numbers <i>(draft)</i></h1>
 
         <h2 className="text-xl my-2">Numbers internally</h2>
         <NumbersInternallySection />
@@ -68,7 +75,7 @@ export default function Page() {
 }
 
 export const Head = () => (
-    <SEO title="Articles / Javascript numbers bits"/>
+    <SEO title={metadata.title} description={metadata.description} lang={metadata.lang} />
 )
 
 const BitwiseOperationsSection = () => {
