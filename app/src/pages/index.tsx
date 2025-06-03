@@ -2,22 +2,17 @@ import * as React from "react"
 import type { HeadFC, PageProps } from "gatsby"
 import Layout, { SEO } from "../templates/layout"
 
-const paragraphStyles = {
-  marginBottom: 48,
-}
-const codeStyles = {
-  color: "#8A6534",
-  padding: 4,
-  backgroundColor: "#FFF4DB",
-  fontSize: "1.25rem",
-  borderRadius: 4,
-}
 
 const IndexPage: React.FC<PageProps> = () => {
   return (
     <Layout>
-      <p style={paragraphStyles}>
-        Hi! You can read my blogs at linkedin and <a href="https://t.me/borischan">telegram</a>, and see my project on <a href="https://github.com/boryashkin">github</a>.
+      <h1 className="text-xl">Welcome to my playground</h1>
+      <p className="max-w-xl">
+      By day, I write backend code. By night, I build <b>interactive algorithm</b> demos to trick myself into learning.
+      This site is where I tear apart <b>systems</b> until they make sense <small>(or until I give up)</small>. If you also enjoy deeply flawed first drafts, you’ll fit right in.
+        <br />
+        <br />
+        Explore.
       </p>
     </Layout>
   )
@@ -26,5 +21,5 @@ const IndexPage: React.FC<PageProps> = () => {
 export default IndexPage
 
 export const Head = () => (
-  <SEO title="Cool SWE website"/>
+  <SEO title="Weird experiments in algorithms & systems" description="Reverse engineering reality, one algorithm at a time. Interactive explainers, hacky prototypes, and occasional rants about databases."/>
 )
