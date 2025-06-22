@@ -35,7 +35,8 @@ const config: GatsbyConfig = {
         ignore: [`**/*.js`],
       },
     },
-  ]
+  ],
+  jsxRuntime: 'automatic',
 };
 
 export default config;

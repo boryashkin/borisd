@@ -36,6 +36,7 @@ export interface PageContext {
   listName: string;
 }
 
+// don't use concatenation, only string literals, as the static analysis doesn't pick up concatenated strings
 export interface PageMetadata {
   title: string;
   lang: string;
