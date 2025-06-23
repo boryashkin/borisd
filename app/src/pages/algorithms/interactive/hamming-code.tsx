@@ -219,14 +219,14 @@ const ParityCalculator = () => {
     )
 }
 
-export default function Page() {
+export default function Page({ location }: { location: Location }) {
     const [currentData, setCurrentData] = React.useState("H")
     const currentDataBin = currentData.charCodeAt(0).toString(2)
     const numberOfDataBits = currentDataBin.length
     const numberOfParityBits = getParity(numberOfDataBits)
 
     return (
-        <Layout>
+        <Layout location={location}>
             <h1 className="mb-10">Hamming Code visualisation</h1>
             <p className="mb-10">
                 m - number of data bits.<br />

@@ -11,9 +11,9 @@ export const metadata: PageMetadata = {
   date: "2025-06-02",
 };
 
-export default function Page() {
+export default function Page({ location }: { location: Location }) {
   return (
-    <Layout>
+    <Layout location={location}>
         <BlogWrapper title={metadata.title} publishedAt={metadata.date} lang={metadata.lang}>
             <p>Hi! I've decided to move my blog here from <Link to="https://t.me/borischan">Telegram @borischan</Link>, because of a few reasons:</p>
             <ul className="ml-5 list-disc">

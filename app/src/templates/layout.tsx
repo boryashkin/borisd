@@ -1,3 +1,4 @@
+import { Link } from 'gatsby';
 import React from 'react';
 
 interface SEOProps {
@@ -46,7 +47,7 @@ const docLinks = [
     },
 ]
 
-export default function Layout({ children }: {children: any}) {
+export default function Layout({ children, location }: {children: any, location?: Location}) {
     return (
       <>
         <main className="p-10">
@@ -55,6 +56,7 @@ export default function Layout({ children }: {children: any}) {
                 <br />
                 <span className="text-sm bg-amber-200">— Software Developer</span>
             </h1>
+            <Breadcrumbs location={location} />
             <div className="my-10">
             {children}
             </div>
@@ -73,4 +75,34 @@ export default function Layout({ children }: {children: any}) {
         </main>
       </>
     )
+}
+
+const Breadcrumbs = ({ location }: { location?: Location }) => {
+  if (!location || !location.pathname) {
+        return null; // No breadcrumbs if location is not defined
+    }
+
+    const pathParts = location.pathname.split('/').filter(part => part)
+
+    return (
+        <nav className="my-4 text-xs">
+            <ul className="flex space-x-2">
+              <li>
+                  <Link to={'/'} className="hover:underline">
+                      /
+                  </Link>
+              </li>
+                {pathParts.map((part, index) => {
+                    const href = `/${pathParts.slice(0, index + 1).join('/')}`;
+                    return (
+                        <li key={href}>
+                            {index == 0 ? '' : ' / '} <Link to={href} className="hover:underline">
+                                { part }
+                            </Link>
+                        </li>
+                    );
+                })}
+            </ul>
+        </nav>
+    );
 }

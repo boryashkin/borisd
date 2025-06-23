@@ -14,7 +14,8 @@ type IndexMetadata implements Node {
 export interface IndexMetadataNodeValue {
     id: string;
     path: string; // /blog/one/two
-    pathPrefix: string; // blog
+    pathPrefix: string; // blog // DEPRECATED
+    pathPrefixes: string[];
     title: string;
     lang: string;
     description: string|undefined;
@@ -24,6 +25,17 @@ export interface IndexMetadataNodeValue {
 export function getPathPrefix(path: string): string {
     const segments = path.split("/").filter(Boolean) // removes empty strings
     return segments.length > 1 ? segments[0] : ""
+}
+
+export function getPathPrefixes(path: string): string[] {
+    const segments = path.split("/").filter(Boolean); // removes empty strings
+    const prefixes = [];
+
+    for (let i = 1; i < segments.length; i++) {
+        prefixes.push(segments.slice(0, i).join("/"));
+    }
+
+    return prefixes;
 }
 
 export interface PageContext {
@@ -49,6 +61,7 @@ export const metadataFieldsToNodeValues = (id: string, path: string, b: PageMeta
       id: id,
       path: path,
       pathPrefix: getPathPrefix(path),
+      pathPrefixes: getPathPrefixes(path),
       title: b.title,
       lang: b.lang,
       description: b.description,

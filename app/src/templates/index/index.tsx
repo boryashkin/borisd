@@ -3,15 +3,10 @@ import { PageProps, graphql, Link } from 'gatsby';
 import Layout from '../layout';
 import { IndexMetadataNodeValue, PageContext } from '../../models/index';
 
-/*
-  * It's still hardcoded as a blog index. 
-  * todo: make it more generic.
-  */
-
 export const query = graphql`
 query ($limit: Int!, $skip: Int!, $section: String!) {
   allIndexMetadata(
-    filter:{pathPrefix:{eq:$section}}, 
+    filter:{pathPrefixes:{in:[$section]}}, 
     sort: {date:DESC} 
     limit: $limit
     skip: $skip
@@ -19,7 +14,7 @@ query ($limit: Int!, $skip: Int!, $section: String!) {
     nodes{
       id
       path
-      pathPrefix
+      pathPrefixes
       title
       lang
       description
@@ -45,7 +40,7 @@ interface IndexData {
     };
 }
 
-const BlogIndex: React.FC<PageProps<IndexData, PageContext>> = ({ data, pageContext }) => {
+const BlogIndex: React.FC<PageProps<IndexData, PageContext>> = ({ data, pageContext, location }) => {
   const { nodes } = data.allIndexMetadata;
   const { siteUrl } = data.site.siteMetadata;
   const { currentPage, numPages } = pageContext;
@@ -56,7 +51,7 @@ const BlogIndex: React.FC<PageProps<IndexData, PageContext>> = ({ data, pageCont
   const nextPage = getNextPageUrl(pageContext);
 
   return (
-    <Layout>
+    <Layout location={location}>
       <h1>{pageContext.listName ?? 'Contents'}:</h1>
       <ul className="ml-5 list-disc">
         {nodes.map((post) => {
@@ -66,7 +61,7 @@ const BlogIndex: React.FC<PageProps<IndexData, PageContext>> = ({ data, pageCont
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',
-                })}</i></small> <Link to={post.path}>
+                })}</i></small> <PathPrefixesToBreadcrumbsComponent pathPrefixes={post.pathPrefixes} /><Link to={post.path}>
                 {post.title}
               </Link>
               <div>
@@ -141,4 +136,33 @@ const getNextPageUrl = (pageContext: PageContext): string => {
 
 const getPageUrlI = (pageContext: PageContext, i: number): string => {
   return i < 2 ? pageContext.pathPrefixRoot : `${pageContext.pathPrefixRoot}/page/${i}`;
+}
+
+// exclude the first one
+const PathPrefixesToBreadcrumbsComponent = (props: {pathPrefixes: string[]}): React.ReactNode => {
+  if (!props.pathPrefixes || props.pathPrefixes.length < 2) {
+    return null;
+  }
+
+  let prefixes = props.pathPrefixes.slice(1); // skip the first one, which is the root path
+
+  
+  return (
+    <nav aria-label="breadcrumb" className="inline-block px-1">
+        {prefixes.map((prefix, index) => (
+          <span key={index} className="breadcrumb-item px-1 text-xs">
+            <Link to={`/${prefix}`}>{prefixToName(lastPartOfPath(prefix))}</Link> / 
+          </span>
+        ))}
+    </nav>
+  );
+}
+
+const prefixToName = (prefix: string): string => {
+  return prefix.replace(/-/g, ' ');
+}
+
+const lastPartOfPath = (path: string): string => {
+  const segments = path.split('/').filter(Boolean); // removes empty strings
+  return segments.length > 0 ? segments[segments.length - 1] : '';
 }

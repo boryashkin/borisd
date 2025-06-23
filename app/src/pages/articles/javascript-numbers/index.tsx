@@ -45,9 +45,9 @@ const ArrayTableView = (props: {values: Array<string|number>, withIndexHeader: b
     )
 }
 
-export default function Page() {
+export default function Page({ location }: { location: Location }) {
   return (
-    <Layout>
+    <Layout location={location}>
         <h1 className="text-2xl mb-5">Inside JavaScript Numbers <i>(draft)</i></h1>
 
         <h2 className="text-xl my-2">Numbers internally</h2>

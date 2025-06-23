@@ -14,6 +14,23 @@ interface QueryResult {
   }
 }
 
+interface PathPrefixesResult {
+  allIndexMetadata: {
+    nodes: {
+      pathPrefixes: string[];
+    }[]
+  }
+}
+
+const postsPerPage = 30;
+
+const sectionTitles : Record<string, string> = {
+  'blog': 'Blog posts',
+  'articles': 'Articles',
+  'articles/dialogs-with-llms': 'Dialogs with LLMs',
+  'algorithms': 'Algorithms',
+}
+
 export const onCreateNode: GatsbyNode['onCreateNode'] = async ({ node, actions, createNodeId }) => {
   const { createNodeField, createNode } = actions;
 
@@ -94,31 +111,47 @@ exports.createSchemaCustomization = ({ actions }) => {
   createTypes(IndexMetadataDeclaration)
 }
 
-interface IndexToTitle {
-  section: string
-  title: string
-}
-
 export const createPages: GatsbyNode['createPages'] = async ({ graphql, actions }) => {
   const { createPage } = actions;
 
-  const sections : IndexToTitle[] = [
-    {section: 'blog', title: 'Blog posts'},
-    {section: 'articles', title: 'Articles'},
-    {section: 'algorithms', title: 'Algorithms'},
-  ]
+  const pathPrefixesResult = await graphql<PathPrefixesResult>(`
+    query {
+      allIndexMetadata {
+        nodes{
+          pathPrefixes
+        }
+      }
+    }
+  `);
+
+  if (pathPrefixesResult.errors || !pathPrefixesResult.data) {
+    throw pathPrefixesResult.errors;
+  }
+
+  if (!pathPrefixesResult.data) throw new Error("Empty GraphQL result")
+  
+    let uniquePrefixes: Set<string> = new Set();
+
+    for (const prefArray of pathPrefixesResult.data.allIndexMetadata.nodes) {
+      for (const prefix of prefArray.pathPrefixes) {
+        if (prefix && prefix.length > 0) {
+          uniquePrefixes.add(prefix);
+        }
+      }
+    }
 
   // index pages are created here
-  for (const item of sections) {
+  for (const pathSection of uniquePrefixes) {
     const result = await graphql<QueryResult>(`
     query ($section: String!) {
       allIndexMetadata(
-        filter:{pathPrefix:{eq:$section}}, 
+        filter:{pathPrefixes:{in: [$section]}}, 
         sort: {date:DESC}
       ){
         nodes{
           path
           pathPrefix
+          pathPrefixes
           title
           lang
           description
@@ -126,7 +159,7 @@ export const createPages: GatsbyNode['createPages'] = async ({ graphql, actions 
         }
       }
     }
-  `, {"section": item.section});
+  `, {"section": pathSection});
 
     if (result.errors || !result.data) {
       throw result.errors;
@@ -135,7 +168,6 @@ export const createPages: GatsbyNode['createPages'] = async ({ graphql, actions 
     if (!result.data) throw new Error("Empty GraphQL result")
 
     const posts = result.data.allIndexMetadata.nodes;
-    const postsPerPage = 30;
     const numPages = Math.ceil(posts.length / postsPerPage);
 
     Array.from({ length: numPages }).forEach((_, i) => {
@@ -147,18 +179,22 @@ export const createPages: GatsbyNode['createPages'] = async ({ graphql, actions 
         skip,
         numPages,
         currentPage,
-        pathPrefixRoot: `/${item.section}`,
-        section: item.section,
-        listName: item.title,
+        pathPrefixRoot: `/${pathSection}`,
+        section: pathSection,
+        listName: sectionToTitle(pathSection),
       }
 
       createPage({
-        path: i === 0 ? `/${item.section}` : `/${item.section}/page/${currentPage}`,
+        path: i === 0 ? `/${pathSection}` : `/${pathSection}/page/${currentPage}`,
         component: path.resolve(`src/templates/index/index.tsx`),
         context: ctx
       });
 
-      console.debug('created a page', item.section)
+      console.debug('created a page', pathSection)
     });
   }
 };
+
+const sectionToTitle = (section: string): string => {
+  return sectionTitles[section] || (section.charAt(0).toUpperCase() + section.slice(1)).replace("-", " ").replace("/", " / ");
+}
