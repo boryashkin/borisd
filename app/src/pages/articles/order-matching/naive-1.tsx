@@ -8,10 +8,10 @@ import ArticleWrapper from "../../../templates/article/wrapper";
 import { Link } from "gatsby";
 
 export const metadata: PageMetadata = {
-    title: 'Order matching: algorithms [1]',
+    title: 'Order matching: algorithms [1] (draft)',
     lang: "en",
     description: "I stumbled upon my bachelor thesis, where i made a trading system for virtual 'coins' at work. And i remembered how i tried to research and write up on order matching algorithms, but had no time for that. Now i have, and i'm starting...",
-    date: "2025-06-06",
+    date: "2025-07-20",
 };
 
 const Literature = [

@@ -8,8 +8,8 @@ const IndexPage: React.FC<PageProps> = () => {
     <Layout>
       <h1 className="text-xl">Welcome to my playground</h1>
       <p className="max-w-xl">
-      By day, I write backend code. By night, I build <b>interactive algorithm</b> demos to trick myself into learning.
-      This site is where I tear apart <b>systems</b> until they make sense <small>(or until I give up)</small>. If you also enjoy deeply flawed first drafts, you’ll fit right in.
+        I want to build <b>interactive algorithm</b> demos here and tear apart <b>systems</b> to learn something new. 
+        Maybe you'll find something useful here too.
         <br />
         <br />
         Explore.
