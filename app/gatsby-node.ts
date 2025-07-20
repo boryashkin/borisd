@@ -86,6 +86,8 @@ export const onCreateNode: GatsbyNode['onCreateNode'] = async ({ node, actions, 
         const id = createNodeId(`IndexMetadata-${itemPath}`);
         let metadata: IndexMetadataNodeValue = metadataFieldsToNodeValues(id, itemPath, metadataPreFilled);
 
+        console.log("[DEBUG] METADATA metadataFieldsToNodeValues", metadata.pathPrefixes)
+
         const digest = createContentDigest(metadata);
         createNode({
           ...metadata,
