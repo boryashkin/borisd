@@ -23,7 +23,7 @@ export default function Page({ location }: { location: Location }) {
 
           <br /><br />
           This weeks results:
-          <h3 className="text-1xl mt-5"><b>Week 1</b> (2 09/25)</h3>
+          <h3 className="text-1xl mt-5"><b>Week 2</b> (2 09/25)</h3>
             <ul className="ml-5 list-disc">
                 <li><b>Mon</b>: Leetcode - 1 <i>(but haven't solved it, moved to the next week)</i></li>
                 <li><b>Tue</b>: -</li>
@@ -33,7 +33,8 @@ export default function Page({ location }: { location: Location }) {
                 <li><b>Sat</b>: -</li>
                 <li><b>Sun</b>: -</li>
             </ul>
-            <i><Link to="/blog/2025/09/a-week-of-algorithms-kind-of">{'<'} previous week</Link></i>
+            <br />
+            <i><Link to="/blog/2025/09/a-week-of-algorithms-kind-of/">{'<'} previous week</Link></i>
         </p>
       </BlogWrapper>
     </Layout>
